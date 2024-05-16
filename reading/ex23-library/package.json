@@ -1,0 +1,20 @@
+{
+  "name": "21-concurrency",
+  "private": true,
+  "engines": {
+    "node": "^16.13.2"
+  },
+  "scripts": {
+    "library": "tsc && node --require source-map-support/register dist/library.js",
+    "sync": "tsc && node --require source-map-support/register dist/sync.js",
+    "async": "tsc && node --require source-map-support/register dist/async.js",
+    "worker": "tsc && node --require source-map-support/register dist/using-workers.js"
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.21",
+    "source-map-support": "^0.5.21",
+    "typescript": "^4.5.5"
+  },
+  "dependencies": {
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "files.exclude": {
+    ".git/": true,
+    ".vscode/": true,
+    ".gitignore": true,
+    ".npmrc": true,
+    "dist/": true,
+    "node_modules/": true,
+    "tsconfig.json": true,
+    "**/.DS_Store": true
+  },
+  "terminal.integrated.defaultProfile.windows": "Git Bash",
+  "terminal.integrated.automationShell.windows": "C:\\Program Files\\Git\\bin\\bash.exe",
+  "editor.formatOnPaste": false,
+  "editor.formatOnSave": false,
+  "editor.formatOnType": false,
+  "javascript.suggest.autoImports": false,
+  "typescript.suggest.autoImports": false
+}

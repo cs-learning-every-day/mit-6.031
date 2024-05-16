@@ -1,0 +1,19 @@
+{
+    "files.exclude": {
+        ".vscode/": true,
+        "node_modules/": true,
+        "dist/": true,
+        "**/.DS_Store": true,
+        "**/.gitignore": true,
+        "package-lock.json": true,
+        ".npmrc": true,
+        ".eslintrc.js": true,
+        ".eslintignore": true,
+        ".nyc_output/": true
+    },
+    "editor.formatOnPaste": false,
+    "editor.formatOnSave": false,
+    "editor.formatOnType": false,
+    "javascript.suggest.autoImports": false,
+    "typescript.suggest.autoImports": false
+}

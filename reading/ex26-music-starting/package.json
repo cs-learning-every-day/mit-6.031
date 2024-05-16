@@ -1,0 +1,26 @@
+{
+  "name": "26-music-starting",
+  "private": true,
+  "engines": {
+    "node": "^16.13.2"
+  },
+  "scripts": {
+    "ScaleSequence": "tsc && node --require source-map-support/register dist/examples/ScaleSequence.js",
+    "ScaleMusic": "tsc && node --require source-map-support/register dist/examples/ScaleMusic.js",
+    "RowYourBoatInitial": "tsc && node --require source-map-support/register dist/examples/RowYourBoatInitial.js",
+    "WebServer": "tsc && node --require source-map-support/register dist/WebServer.js"
+  },
+  "devDependencies": {
+    "@types/browserify": "^12.0.37",
+    "@types/express": "^4.17.13",
+    "@types/node": "^16.11.21",
+    "source-map-support": "^0.5.21",
+    "typescript": "^4.5.5"
+  },
+  "dependencies": {
+    "browserify": "^17.0.0",
+    "express": "^4.17.2",
+    "jzz": "^1.4.5",
+    "jzz-midi-smf": "^1.6.4"
+  }
+}

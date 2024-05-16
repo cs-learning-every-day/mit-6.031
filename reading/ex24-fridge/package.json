@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "engines": {
+    "node": "^16.13.2"
+  },
+  "scripts": {
+    "loadfridge": "tsc && node --require source-map-support/register dist/loadfridge.js"
+  },
+  "dependencies": {
+    "@types/node": "^16.11.21",
+    "source-map-support": "^0.5.21"
+  }
+}
