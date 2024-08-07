@@ -15,34 +15,55 @@ public class ExtractTest {
 
     /*
      * TODO: your testing strategies for these methods should go here.
-     * See the ic03-testing exercise for examples of what a testing strategy comment looks like.
+     * See the ic03-testing exercise for examples of what a testing strategy comment
+     * looks like.
      * Make sure you have partitions.
      */
-    
+
     private static final Instant d1 = Instant.parse("2016-02-17T10:00:00Z");
     private static final Instant d2 = Instant.parse("2016-02-17T11:00:00Z");
-    
+    private static final Instant d3 = Instant.parse("2024-08-07T11:00:00Z");
+
     private static final Tweet tweet1 = new Tweet(1, "alyssa", "is it reasonable to talk about rivest so much?", d1);
     private static final Tweet tweet2 = new Tweet(2, "bbitdiddle", "rivest talk in 30 minutes #hype", d2);
-    
-    @Test(expected=AssertionError.class)
+    private static final Tweet tweet3 = new Tweet(3, "xmchx", "The best things to do is have fun @alyssa,@bbitdiddle",
+            d3);
+    private static final Tweet tweet4 = new Tweet(4, "xmchx2", "The best things to do is have fun alyssa@email", d3);
+    private static final Tweet tweet5 = new Tweet(5, "xmchx2", "The best things to do is have fun @AlYssa@Xmchx", d3);
+
+    @Test(expected = AssertionError.class)
     public void testAssertionsEnabled() {
         assert false; // make sure assertions are enabled with VM argument: -ea
     }
-    
+
     @Test
     public void testGetTimespanTwoTweets() {
         Timespan timespan = Extract.getTimespan(Arrays.asList(tweet1, tweet2));
-        
+
         assertEquals("expected start", d1, timespan.getStart());
         assertEquals("expected end", d2, timespan.getEnd());
     }
-    
+
     @Test
     public void testGetMentionedUsersNoMention() {
         Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet1));
-        
+
         assertTrue("expected empty set", mentionedUsers.isEmpty());
+    }
+
+    @Test
+    public void testGetMentionedUsers() {
+        Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet3));
+        assertEquals(2, mentionedUsers.size());
+        assertTrue(mentionedUsers.contains("bbitdiddle"));
+        assertTrue(mentionedUsers.contains("alyssa"));
+
+        mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet4));
+        assertEquals(0, mentionedUsers.size());
+
+        mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet5));
+        assertEquals(1, mentionedUsers.size());
+        assertTrue(mentionedUsers.contains("alyssa"));
     }
 
     /*

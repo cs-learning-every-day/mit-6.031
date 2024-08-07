@@ -3,9 +3,17 @@
  */
 package twitter;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
+import java.util.regex.Pattern;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * SocialNetwork provides methods that operate on a social network.
@@ -13,8 +21,10 @@ import java.util.Set;
  * A social network is represented by a Map<String, Set<String>> where map[A] is
  * the set of people that person A follows on Twitter, and all people are
  * represented by their Twitter usernames. Users can't follow themselves. If A
- * doesn't follow anybody, then map[A] may be the empty set, or A may not even exist
- * as a key in the map; this is true even if A is followed by other people in the network.
+ * doesn't follow anybody, then map[A] may be the empty set, or A may not even
+ * exist
+ * as a key in the map; this is true even if A is followed by other people in
+ * the network.
  * Twitter usernames are not case sensitive, so "ernie" is the same as "ERNie".
  * A username should appear at most once as a key in the map or in any given
  * map[A] set.
@@ -29,19 +39,34 @@ public class SocialNetwork {
      * Guess who might follow whom, from evidence found in tweets.
      * 
      * @param tweets
-     *            a list of tweets providing the evidence, not modified by this
-     *            method.
+     *               a list of tweets providing the evidence, not modified by this
+     *               method.
      * @return a social network (as defined above) in which Ernie follows Bert
      *         if and only if there is evidence for it in the given list of
      *         tweets.
      *         One kind of evidence that Ernie follows Bert is if Ernie
-     *         @-mentions Bert in a tweet. This must be implemented. Other kinds
-     *         of evidence may be used at the implementor's discretion.
-     *         All the Twitter usernames in the returned social network must be
-     *         either authors or @-mentions in the list of tweets.
+     * @-mentions Bert in a tweet. This must be implemented. Other kinds
+     *            of evidence may be used at the implementor's discretion.
+     *            All the Twitter usernames in the returned social network must be
+     *            either authors or @-mentions in the list of tweets.
      */
     public static Map<String, Set<String>> guessFollowsGraph(List<Tweet> tweets) {
-        throw new RuntimeException("not implemented");
+        Map<String, Set<String>> res = new HashMap<>();
+        Pattern mentionPattern = Pattern.compile("\\B@[A-Za-z0-9_-]+\\b");
+        Set<String> s;
+
+        for (var tweet : tweets) {
+            res.putIfAbsent(tweet.getAuthor(), new HashSet<>());
+
+            s = res.get(tweet.getAuthor());
+
+            var matcher = mentionPattern.matcher(tweet.getText());
+            while (matcher.find()) {
+                s.add(matcher.group().substring(1).toLowerCase());
+            }
+        }
+
+        return res;
     }
 
     /**
@@ -49,12 +74,25 @@ public class SocialNetwork {
      * the sense that they have the most followers.
      * 
      * @param followsGraph
-     *            a social network (as defined above)
+     *                     a social network (as defined above)
      * @return a list of all distinct Twitter usernames in followsGraph, in
      *         descending order of follower count.
      */
     public static List<String> influencers(Map<String, Set<String>> followsGraph) {
-        throw new RuntimeException("not implemented");
-    }
+        Map<String, Integer> m = new HashMap<>();
 
+        for (var entry : followsGraph.entrySet()) {
+            m.putIfAbsent(entry.getKey(), 0);
+            for (String following : entry.getValue()) {
+                m.put(following, m.getOrDefault(following, 0) + 1);
+            }
+        }
+
+        return m.entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue(Comparator.reverseOrder()))
+                .filter(e -> e.getValue() > 0)
+                .map(e -> e.getKey())
+                .collect(Collectors.toList());
+    }
 }
