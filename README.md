@@ -4,7 +4,7 @@
 
 - [x] Problemset 0: Turtle Graphics -- Intro to Java.
 - [X] Problemset 1: Tweet -- test-first programming.
-- [ ] Problemset 2: Poetic Walks -- Design and implement mutable abstract data types.
+- [X] Problemset 2: Poetic Walks -- Design and implement mutable abstract data types.
 - [ ] Problemset 3: Expressivo -- Design and implement immutable abstract data types.
 - [ ] Problemset 4: Multiplayer minesweeper -- Concurrence programming.
 - [ ] Project : ABC music player

@@ -12,13 +12,14 @@ import java.util.Set;
  * using the {@link Object#equals(Object) equals} method.
  * Edges are directed and have a positive weight of type {@code int}.
  * 
- * <p>PS2 instructions: this is a required ADT interface.
+ * <p>
+ * PS2 instructions: this is a required ADT interface.
  * You MUST NOT change the specifications or add additional methods.
  * 
  * @param <L> type of vertex labels in this graph, must be immutable
  */
 public interface Graph<L> {
-    
+
     /**
      * Create an empty graph.
      * 
@@ -26,9 +27,10 @@ public interface Graph<L> {
      * @return a new empty weighted directed graph
      */
     public static <L> Graph<L> empty() {
-        throw new RuntimeException("not implemented");
+        var res = new ConcreteEdgesGraph<L>();
+        return res;
     }
-    
+
     /**
      * Add a vertex to this graph.
      * 
@@ -37,7 +39,7 @@ public interface Graph<L> {
      *         given label; otherwise false (and this graph is not modified)
      */
     public boolean add(L vertex);
-    
+
     /**
      * Add, change, or remove a weighted directed edge in this graph.
      * If weight is nonzero, add an edge or update the weight of that edge;
@@ -53,7 +55,7 @@ public interface Graph<L> {
      *         edge
      */
     public int set(L source, L target, int weight);
-    
+
     /**
      * Remove a vertex from this graph; any edges to or from the vertex are
      * also removed.
@@ -63,14 +65,14 @@ public interface Graph<L> {
      *         otherwise false (and this graph is not modified)
      */
     public boolean remove(L vertex);
-    
+
     /**
      * Get all the vertices in this graph.
      * 
      * @return the set of labels of vertices in this graph
      */
     public Set<L> vertices();
-    
+
     /**
      * Get the source vertices with directed edges to a target vertex and the
      * weights of those edges.
@@ -82,7 +84,7 @@ public interface Graph<L> {
      *         the key to target
      */
     public Map<L, Integer> sources(L target);
-    
+
     /**
      * Get the target vertices with directed edges from a source vertex and the
      * weights of those edges.
@@ -94,5 +96,5 @@ public interface Graph<L> {
      *         source to the key
      */
     public Map<L, Integer> targets(L source);
-    
+
 }
