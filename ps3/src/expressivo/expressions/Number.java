@@ -1,5 +1,6 @@
 package expressivo.expressions;
 
+import java.util.Map;
 import java.util.Objects;
 
 import expressivo.Expression;
@@ -35,6 +36,20 @@ public class Number implements Expression {
   @Override
   public int hashCode() {
     return Objects.hash(value);
+  }
+
+  @Override
+  public Expression differentiate(String variable) {
+    return new Number(0);
+  }
+
+  @Override
+  public Expression simplify(Map<String, Double> environment) {
+    return this;
+  }
+
+  public double getValue() {
+    return value;
   }
 
 }

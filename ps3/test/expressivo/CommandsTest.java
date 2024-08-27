@@ -13,14 +13,13 @@ import org.junit.Test;
 public class CommandsTest {
 
     // Testing strategy
-    //   TODO
-    
-    @Test(expected=AssertionError.class)
+    // TODO
+
+    @Test(expected = AssertionError.class)
     public void testAssertionsEnabled() {
         assert false; // make sure assertions are enabled with VM argument: -ea
     }
-    
-    
+
     // TODO tests for Commands.differentiate() and Commands.simplify()
-    
+
 }

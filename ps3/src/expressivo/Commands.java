@@ -8,39 +8,66 @@ import java.util.Map;
 /**
  * String-based commands provided by the expression system.
  * 
- * <p>PS3 instructions: this is a required class.
- * You MUST NOT change its name or package or the names or type signatures of existing methods.
+ * <p>
+ * PS3 instructions: this is a required class.
+ * You MUST NOT change its name or package or the names or type signatures of
+ * existing methods.
  * You MUST NOT add fields, constructors, or instance methods.
- * You may, however, add additional static methods, or strengthen the specs of existing methods.
+ * You may, however, add additional static methods, or strengthen the specs of
+ * existing methods.
  */
 public class Commands {
-    
+
     /**
      * Differentiate an expression with respect to a variable.
+     * 
      * @param expression the expression to differentiate
-     * @param variable the variable to differentiate by, a case-sensitive nonempty string of letters.
-     * @return expression's derivative with respect to variable.  Must be a valid expression equal
-     *         to the derivative, but doesn't need to be in simplest or canonical form.
+     * @param variable   the variable to differentiate by, a case-sensitive nonempty
+     *                   string of letters.
+     * @return expression's derivative with respect to variable. Must be a valid
+     *         expression equal
+     *         to the derivative, but doesn't need to be in simplest or canonical
+     *         form.
      * @throws IllegalArgumentException if the expression or variable is invalid
      */
     public static String differentiate(String expression, String variable) {
-        throw new RuntimeException("unimplemented");
+        try {
+            Expression expr = Expression.parse(expression);
+            Expression derivative = expr.differentiate(variable);
+            return derivative.toString();
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Invalid expression or variable", e);
+        }
     }
-    
+
     /**
      * Simplify an expression.
-     * @param expression the expression to simplify
-     * @param environment maps variables to values.  Variables are required to be case-sensitive nonempty 
-     *         strings of letters.  The set of variables in environment is allowed to be different than the 
-     *         set of variables actually found in expression.  Values must be nonnegative numbers.
-     * @return an expression equal to the input, but after substituting every variable v that appears in both
-     *         the expression and the environment with its value, environment.get(v).  If there are no
-     *         variables left in this expression after substitution, it must be evaluated to a single number.
-     *         Additional simplifications to the expression may be done at the implementor's discretion.
+     * 
+     * @param expression  the expression to simplify
+     * @param environment maps variables to values. Variables are required to be
+     *                    case-sensitive nonempty
+     *                    strings of letters. The set of variables in environment is
+     *                    allowed to be different than the
+     *                    set of variables actually found in expression. Values must
+     *                    be nonnegative numbers.
+     * @return an expression equal to the input, but after substituting every
+     *         variable v that appears in both
+     *         the expression and the environment with its value,
+     *         environment.get(v). If there are no
+     *         variables left in this expression after substitution, it must be
+     *         evaluated to a single number.
+     *         Additional simplifications to the expression may be done at the
+     *         implementor's discretion.
      * @throws IllegalArgumentException if the expression is invalid
      */
-    public static String simplify(String expression, Map<String,Double> environment) {
-        throw new RuntimeException("unimplemented");
+    public static String simplify(String expression, Map<String, Double> environment) {
+        try {
+            Expression expr = Expression.parse(expression);
+            Expression simplified = expr.simplify(environment);
+            return simplified.toString();
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Invalid expression or environment", e);
+        }
     }
-    
+
 }

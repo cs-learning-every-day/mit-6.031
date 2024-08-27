@@ -3,6 +3,8 @@
  */
 package expressivo;
 
+import java.util.Map;
+
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CharStream;
@@ -138,5 +140,24 @@ public interface Expression {
     public int hashCode();
 
     // TODO more instance methods
+    /**
+     * Differentiate this expression with respect to a variable.
+     * 
+     * @param variable the variable to differentiate by, a case-sensitive nonempty
+     *                 string of letters
+     * @return the derivative of this expression with respect to the variable
+     */
+    Expression differentiate(String variable);
+
+    /**
+     * Simplify this expression by substituting variables with values from the
+     * environment.
+     * 
+     * @param environment maps variables to values. Variables not in the environment
+     *                    remain unchanged.
+     * @return a simplified expression with variables replaced and any possible
+     *         simplifications performed.
+     */
+    Expression simplify(Map<String, Double> environment);
 
 }
