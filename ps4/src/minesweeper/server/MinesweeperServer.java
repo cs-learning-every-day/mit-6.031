@@ -15,7 +15,7 @@ import minesweeper.Board;
 public class MinesweeperServer {
 
     // System thread safety argument
-    //   TODO Problem 5
+    // TODO Problem 5
 
     /** Default server port. */
     private static final int DEFAULT_PORT = 4444;
@@ -34,7 +34,7 @@ public class MinesweeperServer {
     /**
      * Make a MinesweeperServer that listens for connections on port.
      * 
-     * @param port port number, requires 0 <= port <= 65535
+     * @param port  port number, requires 0 <= port <= 65535
      * @param debug debug mode flag
      * @throws IOException if an error occurs opening the server socket
      */
@@ -48,21 +48,16 @@ public class MinesweeperServer {
      * Never returns unless an exception is thrown.
      * 
      * @throws IOException if the main server socket is broken
-     *                     (IOExceptions from individual clients do *not* terminate serve())
+     *                     (IOExceptions from individual clients do *not* terminate
+     *                     serve())
      */
     public void serve() throws IOException {
         while (true) {
             // block until a client connects
             Socket socket = serverSocket.accept();
+            Thread t = new Thread(new ClientHandler(socket, this));
+            t.start();
 
-            // handle the client
-            try {
-                handleConnection(socket);
-            } catch (IOException ioe) {
-                ioe.printStackTrace(); // but don't terminate serve()
-            } finally {
-                socket.close();
-            }
         }
     }
 
@@ -70,9 +65,10 @@ public class MinesweeperServer {
      * Handle a single client connection. Returns when client disconnects.
      * 
      * @param socket socket where the client is connected
-     * @throws IOException if the connection encounters an error or terminates unexpectedly
+     * @throws IOException if the connection encounters an error or terminates
+     *                     unexpectedly
      */
-    private void handleConnection(Socket socket) throws IOException {
+    protected void handleConnection(Socket socket) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
@@ -91,15 +87,16 @@ public class MinesweeperServer {
     }
 
     /**
-     * Handler for client input, performing requested operations and returning an output message.
+     * Handler for client input, performing requested operations and returning an
+     * output message.
      * 
      * @param input message from client
      * @return message to client, or null if none
      */
     private String handleRequest(String input) {
         String regex = "(look)|(help)|(bye)|"
-                     + "(dig -?\\d+ -?\\d+)|(flag -?\\d+ -?\\d+)|(deflag -?\\d+ -?\\d+)";
-        if ( ! input.matches(regex)) {
+                + "(dig -?\\d+ -?\\d+)|(flag -?\\d+ -?\\d+)|(deflag -?\\d+ -?\\d+)";
+        if (!input.matches(regex)) {
             // invalid input
             // TODO Problem 5
         }
@@ -134,29 +131,49 @@ public class MinesweeperServer {
     /**
      * Start a MinesweeperServer using the given arguments.
      * 
-     * <br> Usage:
-     *      MinesweeperServer [--debug | --no-debug] [--port PORT] [--size SIZE_X,SIZE_Y | --file FILE]
+     * <br>
+     * Usage:
+     * MinesweeperServer [--debug | --no-debug] [--port PORT] [--size SIZE_X,SIZE_Y
+     * | --file FILE]
      * 
-     * <br> The --debug argument means the server should run in debug mode. The server should disconnect a
-     *      client after a BOOM message if and only if the --debug flag was NOT given.
-     *      Using --no-debug is the same as using no flag at all.
-     * <br> E.g. "MinesweeperServer --debug" starts the server in debug mode.
+     * <br>
+     * The --debug argument means the server should run in debug mode. The server
+     * should disconnect a
+     * client after a BOOM message if and only if the --debug flag was NOT given.
+     * Using --no-debug is the same as using no flag at all.
+     * <br>
+     * E.g. "MinesweeperServer --debug" starts the server in debug mode.
      * 
-     * <br> PORT is an optional integer in the range 0 to 65535 inclusive, specifying the port the server
-     *      should be listening on for incoming connections.
-     * <br> E.g. "MinesweeperServer --port 1234" starts the server listening on port 1234.
+     * <br>
+     * PORT is an optional integer in the range 0 to 65535 inclusive, specifying the
+     * port the server
+     * should be listening on for incoming connections.
+     * <br>
+     * E.g. "MinesweeperServer --port 1234" starts the server listening on port
+     * 1234.
      * 
-     * <br> SIZE_X and SIZE_Y are optional positive integer arguments, specifying that a random board of size
-     *      SIZE_X*SIZE_Y should be generated.
-     * <br> E.g. "MinesweeperServer --size 42,58" starts the server initialized with a random board of size
-     *      42*58.
+     * <br>
+     * SIZE_X and SIZE_Y are optional positive integer arguments, specifying that a
+     * random board of size
+     * SIZE_X*SIZE_Y should be generated.
+     * <br>
+     * E.g. "MinesweeperServer --size 42,58" starts the server initialized with a
+     * random board of size
+     * 42*58.
      * 
-     * <br> FILE is an optional argument specifying a file pathname where a board has been stored. If this
-     *      argument is given, the stored board should be loaded as the starting board.
-     * <br> E.g. "MinesweeperServer --file boardfile.txt" starts the server initialized with the board stored
-     *      in boardfile.txt.
+     * <br>
+     * FILE is an optional argument specifying a file pathname where a board has
+     * been stored. If this
+     * argument is given, the stored board should be loaded as the starting board.
+     * <br>
+     * E.g. "MinesweeperServer --file boardfile.txt" starts the server initialized
+     * with the board stored
+     * in boardfile.txt.
      * 
-     * <br> The board file format, for use with the "--file" option, is specified by the following grammar:
+     * <br>
+     * The board file format, for use with the "--file" option, is specified by the
+     * following grammar:
+     * 
      * <pre>
      *   FILE ::= BOARD LINE+
      *   BOARD ::= X SPACE Y NEWLINE
@@ -169,9 +186,11 @@ public class MinesweeperServer {
      *   INT ::= [0-9]+
      * </pre>
      * 
-     * <br> If neither --file nor --size is given, generate a random board of size 10x10.
+     * <br>
+     * If neither --file nor --size is given, generate a random board of size 10x10.
      * 
-     * <br> Note that --file and --size may not be specified simultaneously.
+     * <br>
+     * Note that --file and --size may not be specified simultaneously.
      * 
      * @param args arguments as described
      */
@@ -185,7 +204,7 @@ public class MinesweeperServer {
 
         Queue<String> arguments = new LinkedList<String>(Arrays.asList(args));
         try {
-            while ( ! arguments.isEmpty()) {
+            while (!arguments.isEmpty()) {
                 String flag = arguments.remove();
                 try {
                     if (flag.equals("--debug")) {
@@ -206,7 +225,7 @@ public class MinesweeperServer {
                         sizeX = -1;
                         sizeY = -1;
                         file = Optional.of(new File(arguments.remove()));
-                        if ( ! file.get().isFile()) {
+                        if (!file.get().isFile()) {
                             throw new IllegalArgumentException("file not found: \"" + file.get() + "\"");
                         }
                     } else {
@@ -220,7 +239,8 @@ public class MinesweeperServer {
             }
         } catch (IllegalArgumentException iae) {
             System.err.println(iae.getMessage());
-            System.err.println("usage: MinesweeperServer [--debug | --no-debug] [--port PORT] [--size SIZE_X,SIZE_Y | --file FILE]");
+            System.err.println(
+                    "usage: MinesweeperServer [--debug | --no-debug] [--port PORT] [--size SIZE_X,SIZE_Y | --file FILE]");
             return;
         }
 
@@ -232,23 +252,31 @@ public class MinesweeperServer {
     }
 
     /**
-     * Start a MinesweeperServer running on the specified port, with either a random new board or a
+     * Start a MinesweeperServer running on the specified port, with either a random
+     * new board or a
      * board loaded from a file.
      * 
-     * @param debug The server will disconnect a client after a BOOM message if and only if debug is false.
-     * @param file If file.isPresent(), start with a board loaded from the specified file,
-     *             according to the input file format defined in the documentation for main(..).
-     * @param sizeX If (!file.isPresent()), start with a random board with width sizeX
+     * @param debug The server will disconnect a client after a BOOM message if and
+     *              only if debug is false.
+     * @param file  If file.isPresent(), start with a board loaded from the
+     *              specified file,
+     *              according to the input file format defined in the documentation
+     *              for main(..).
+     * @param sizeX If (!file.isPresent()), start with a random board with width
+     *              sizeX
      *              (and require sizeX > 0).
-     * @param sizeY If (!file.isPresent()), start with a random board with height sizeY
+     * @param sizeY If (!file.isPresent()), start with a random board with height
+     *              sizeY
      *              (and require sizeY > 0).
-     * @param port The network port on which the server should listen, requires 0 <= port <= 65535.
+     * @param port  The network port on which the server should listen, requires 0
+     *              <= port <= 65535.
      * @throws IOException if a network error occurs
      */
-    public static void runMinesweeperServer(boolean debug, Optional<File> file, int sizeX, int sizeY, int port) throws IOException {
-        
+    public static void runMinesweeperServer(boolean debug, Optional<File> file, int sizeX, int sizeY, int port)
+            throws IOException {
+
         // TODO: Continue implementation here in problem 4
-        
+
         MinesweeperServer server = new MinesweeperServer(port, debug);
         server.serve();
     }
